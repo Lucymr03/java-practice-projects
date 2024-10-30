@@ -1,0 +1,98 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+
+//flashcards setup
+
+public class Flashcard {
+    private String question;
+    private String answer;
+
+    public Flashcard(String question, String answer) {
+        this.question = question;
+        this.answer = answer;
+    }
+
+    // Getters and setters
+    public String getQuestion() {
+        return question;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+}
+//store / manage flashcards 
+
+public class FlashcardDeck {
+    private ArrayList<Flashcard> cards;   //flashcards
+
+    public FlashcardDeck() {
+        this.cards = new ArrayList<>();
+    }
+
+    public void addFlashcard(String question, String answer) {
+        cards.add(new Flashcard(question, answer));  //manage flashcard
+    }
+
+    public Flashcard getFlashcard(int index) {
+        return cards.get(index);
+    }
+}
+
+public class FlashcardApp {
+    public static void main(String[] args) {
+        FlashcardDeck deck = new FlashcardDeck();
+        Scanner scanner = new Scanner(System.in);
+
+        int correctAnswers = 0;
+        int incorrectAnswers = 0;
+        
+        // Adding some sample flashcards for testing
+        deck.addFlashcard("What is the capital of France?", "Paris");
+        deck.addFlashcard("What is 2 + 2?", "4");
+
+
+        boolean running = true;
+        while (running) {
+            System.out.println("Choose an option: \n1. Add Flashcard\n2. View Flashcard\n3. Quit");
+            int choice = scanner.nextInt(); //input 
+            scanner.nextLine(); // Clear buffer
+
+// display a question and verify the answer
+//show score
+             switch (choice) {
+                case 1 -> {
+                    System.out.print("Enter question: ");
+                    String question = scanner.nextLine();
+                    System.out.print("Enter answer: ");
+                    String answer = scanner.nextLine();
+                    deck.addFlashcard(question, answer);
+                }
+                case 2 -> {
+                    if (!deck.cards.isEmpty()) {
+                        Flashcard card = deck.getFlashcard((int) (Math.random() * deck.cards.size()));
+                        System.out.println("Question: " + card.getQuestion());
+                        System.out.print("Your Answer: ");
+                        String userAnswer = scanner.nextLine();
+                        if (userAnswer.equalsIgnoreCase(card.getAnswer())) {
+                            System.out.println("Correct!");
+                            correctAnswers++;
+                        } else {
+                            System.out.println("Wrong. The correct answer is: " + card.getAnswer());
+                            incorrectAnswers++;
+                        }
+                        // Display the current score
+                        System.out.println("Score: " + correctAnswers + " correct, " + incorrectAnswers + " incorrect.");
+                    } else {
+                        System.out.println("No flashcards available.");
+                    }
+                }
+                case 3 -> {
+                    running = false;
+                    System.out.println("Final Score: " + correctAnswers + " correct, " + incorrectAnswers + " incorrect.");
+                }
+            }
+        }
+        scanner.close();
+    }
+}
